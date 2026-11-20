@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Shield, Cpu, RefreshCw, Menu } from 'lucide-react';
+import { RefreshCw, Menu, Sun, Moon } from 'lucide-react';
 import { Tenant } from '../types';
 
 interface NavbarProps {
@@ -14,30 +14,46 @@ interface NavbarProps {
   mockLlm: boolean;
   onRefresh: () => void;
   onOpenSidebar: () => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ tenants, selectedTenant, setSelectedTenant, mockLlm, onRefresh, onOpenSidebar }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  tenants,
+  selectedTenant,
+  setSelectedTenant,
+  mockLlm,
+  onRefresh,
+  onOpenSidebar,
+  theme,
+  onToggleTheme
+}) => {
   return (
-    <header className="h-16 bg-slate-900 border-b border-slate-800 px-4 md:px-6 flex items-center justify-between shrink-0">
-      <div className="flex items-center space-x-3">
+    <header className="h-16 bg-white dark:bg-[#1c222b] border-b border-slate-200 dark:border-[#2b3442] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0">
+      <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={onOpenSidebar}
-          className="lg:hidden text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition-colors"
-          title="Open Navigation Menu"
+          aria-label="Open navigation menu"
+          className="lg:hidden text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white p-2 rounded-lg bg-slate-100 dark:bg-[#232b36] transition-colors cursor-pointer"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center space-x-2 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 max-w-[240px] md:max-w-none">
-          <span className="text-xs font-semibold text-slate-400 hidden sm:inline">Tenant Context:</span>
+        <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#141920] border border-slate-200 dark:border-[#2b3442] rounded-lg px-3 py-1.5 max-w-[260px] md:max-w-none">
+          <label htmlFor="tenant-select" className="text-xs font-medium text-slate-500 dark:text-slate-400 hidden sm:inline whitespace-nowrap">
+            Workspace:
+          </label>
           <select
+            id="tenant-select"
             value={selectedTenant}
             onChange={(e) => setSelectedTenant(e.target.value)}
-            className="bg-transparent text-xs md:text-sm font-medium text-white focus:outline-none cursor-pointer truncate"
+            className="bg-transparent text-xs md:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer truncate"
           >
-            <option value="" className="bg-slate-900 text-slate-200">All Tenants (MSSP Global View)</option>
+            <option value="" className="bg-white dark:bg-[#1c222b] text-slate-800 dark:text-slate-100">
+              All Tenants (MSSP Global View)
+            </option>
             {tenants.map(t => (
-              <option key={t.tenant_id} value={t.tenant_id} className="bg-slate-900 text-slate-200">
+              <option key={t.tenant_id} value={t.tenant_id} className="bg-white dark:bg-[#1c222b] text-slate-800 dark:text-slate-100">
                 {t.name} ({t.industry})
               </option>
             ))}
@@ -45,30 +61,36 @@ export const Navbar: React.FC<NavbarProps> = ({ tenants, selectedTenant, setSele
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 md:space-x-4">
-        <div className="hidden md:flex items-center space-x-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl text-xs">
-          <Cpu className={`w-4 h-4 ${mockLlm ? 'text-amber-400' : 'text-cyan-400'}`} />
-          <span className="text-slate-300 font-medium">
-            Engine: {mockLlm ? 'Deterministic Fallback (Mock LLM)' : 'Google Gemini Flash Active'}
-          </span>
-        </div>
+      <div className="flex items-center gap-2.5 md:gap-3 shrink-0">
+        <span className="hidden lg:inline text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+          {mockLlm ? 'Deterministic Analysis Mode' : 'Gemini Analysis Active'}
+        </span>
+
+        <button
+          onClick={onToggleTheme}
+          className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200/80 dark:bg-[#232b36] dark:hover:bg-[#2b3544] text-slate-700 dark:text-slate-200 px-3 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          title={theme === 'light' ? 'Switch to soft dark mode' : 'Switch to soft light mode'}
+        >
+          {theme === 'light' ? <Moon className="w-3.5 h-3.5 text-slate-500" /> : <Sun className="w-3.5 h-3.5 text-slate-300" />}
+          <span className="hidden sm:inline">{theme === 'light' ? 'Dark' : 'Light'}</span>
+        </button>
 
         <button
           onClick={onRefresh}
-          className="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors border border-slate-700"
-          title="Refresh Data & Re-sync"
+          className="flex items-center gap-1.5 bg-white hover:bg-slate-50 dark:bg-[#232b36] dark:hover:bg-[#2b3544] text-slate-700 dark:text-slate-200 px-3 py-2 rounded-lg text-xs font-medium transition-colors border border-slate-200 dark:border-[#323d4d] whitespace-nowrap shrink-0 cursor-pointer"
+          title="Refresh data"
         >
-          <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-          <span className="hidden sm:inline">Sync</span>
+          <RefreshCw className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+          <span className="hidden sm:inline">Refresh</span>
         </button>
 
-        <div className="flex items-center space-x-3 pl-2 md:pl-4 border-l border-slate-800">
-          <div className="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">
-            SOC
+        <div className="hidden sm:flex items-center gap-2.5 pl-3 border-l border-slate-200 dark:border-[#2b3442]">
+          <div className="w-8 h-8 rounded-full bg-[#edf4f8] dark:bg-[#22313f] text-[#2c5f7c] dark:text-[#9cc5e0] flex items-center justify-center font-semibold text-xs">
+            SA
           </div>
-          <div className="hidden md:block">
-            <div className="text-xs font-semibold text-white">Lead Security Analyst</div>
-            <div className="text-[10px] text-emerald-400 font-medium">CERT-In Response Team</div>
+          <div className="hidden md:block leading-tight">
+            <div className="text-xs font-semibold text-slate-800 dark:text-slate-100">Security Analyst</div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400">CERT-In Response</div>
           </div>
         </div>
       </div>

@@ -24144,9 +24144,9 @@ var require_interceptor = __commonJS({
   }
 });
 
-// node_modules/https-proxy-agent/node_modules/ms/index.js
+// node_modules/https-proxy-agent/node_modules/debug/node_modules/ms/index.js
 var require_ms3 = __commonJS({
-  "node_modules/https-proxy-agent/node_modules/ms/index.js"(exports, module) {
+  "node_modules/https-proxy-agent/node_modules/debug/node_modules/ms/index.js"(exports, module) {
     var s2 = 1e3;
     var m2 = s2 * 60;
     var h2 = m2 * 60;
