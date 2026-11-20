@@ -1,0 +1,6 @@
+{
+  "name": "ThreatWeave AI",
+  "description": "Explainable, agentic security-investigation platform for Indian SMEs and MSSPs with deterministic rules, ML scoring, PII privacy gateway, and CERT-In reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
